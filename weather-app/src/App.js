@@ -4,15 +4,23 @@ import './App.css';
 function App() {
   const [city, setCity] = useState('');
   const [weatherData, setWeatherData] = useState(null);
+  const [error, setError] = useState(null);
   const API_KEY = '0f08273440751e5674b6c41ddda682e1';
 
   const fetchWeatherData = async () => {
     try {
+      setError(null);
       const response = await fetch(`http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=metric`);
-      const data = await response.json();
-      setWeatherData(data);
+      
+      if (response.ok) {
+        const data = await response.json();
+        setWeatherData(data);
+      } else {
+        setError('City not found. Please enter a valid city name.');
+      }
     } catch (error) {
       console.error('Error fetching weather data:', error);
+      setError('Error fetching weather data. Please try again later.');
     }
   };
 
@@ -26,6 +34,8 @@ function App() {
         onChange={(e) => setCity(e.target.value)}
       />
       <button onClick={fetchWeatherData}>Get Weather</button>
+
+      {error && <div className="error-message">{error}</div>}
 
       {weatherData && (
         <div className="weather-info">
