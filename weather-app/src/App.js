@@ -11,6 +11,7 @@ function App() {
   const fetchWeatherData = async () => {
     try {
       setError(null);
+
       const response = await fetch(`http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=metric`);
       
       if (response.ok) {
@@ -35,6 +36,7 @@ function App() {
         setForecastData([]);
       }
     } catch (error) {
+      
       console.error('Error fetching weather data:', error);
       setError('Error fetching weather data. Please try again later.');
       setForecastData([]);
@@ -52,9 +54,9 @@ function App() {
       />
       <button onClick={fetchWeatherData}>Get Weather</button>
 
-      {error && <div className="error-message">{error}</div>}
+      {error &&  <div className="error-message">{error}</div>}
 
-      {weatherData && (
+      {weatherData && forecastData.length > 0 && (
         <div className="weather-info">
           <h2>Current Weather in {weatherData.name}, {weatherData.sys.country}</h2>
           <p>Temperature: {weatherData.main.temp}°C</p>
